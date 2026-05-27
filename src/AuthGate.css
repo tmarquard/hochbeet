@@ -1,0 +1,127 @@
+.auth-gate {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.auth-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 36px 32px 32px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.auth-logo {
+  height: 110px;
+  width: auto;
+  margin: -8px auto 0;
+  display: block;
+}
+
+.auth-card h1 {
+  font-size: 26px;
+  margin: 0;
+  letter-spacing: -0.4px;
+}
+
+.auth-intro {
+  color: var(--text);
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.auth-input {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-soft);
+  color: var(--text-h);
+  font-size: 15px;
+  font-family: var(--sans);
+  text-align: center;
+  letter-spacing: 0.04em;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.auth-input:focus-visible {
+  outline: 2px solid var(--green-pastel);
+  outline-offset: 1px;
+  border-color: var(--green-dark);
+}
+
+.auth-input.has-error {
+  border-color: #c0533a;
+  background: rgba(192, 83, 58, 0.05);
+}
+
+.auth-remember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-h);
+  cursor: pointer;
+  user-select: none;
+  justify-content: center;
+}
+
+.auth-remember input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--green-dark);
+  cursor: pointer;
+  margin: 0;
+}
+
+.auth-error {
+  margin: -4px 0 0;
+  font-size: 13px;
+  color: #b04830;
+  text-align: center;
+}
+
+.auth-submit {
+  padding: 12px 20px;
+  border: 1px solid var(--accent-border);
+  border-radius: 12px;
+  background: var(--green-pastel);
+  color: var(--accent-text);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    transform 0.08s ease;
+  margin-top: 4px;
+}
+
+.auth-submit:hover {
+  background: var(--accent-hover);
+}
+
+.auth-submit:active {
+  transform: translateY(1px);
+}
+
+.auth-submit:focus-visible {
+  outline: 2px solid var(--green-dark);
+  outline-offset: 2px;
+}

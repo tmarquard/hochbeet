@@ -3,8 +3,10 @@ import './App.css'
 import { BedConfigurator } from './BedConfigurator'
 import { BasketButton } from './Basket'
 import type { BasketItem } from './Basket'
+import { AuthGate, isAuthenticated } from './AuthGate'
 
 function App() {
+  const [authed, setAuthed] = useState<boolean>(() => isAuthenticated())
   const [basket, setBasket] = useState<BasketItem[]>([])
 
   const addToBasket = (config: Omit<BasketItem, 'id'>) => {
@@ -14,6 +16,10 @@ function App() {
 
   const removeFromBasket = (id: string) => {
     setBasket((prev) => prev.filter((item) => item.id !== id))
+  }
+
+  if (!authed) {
+    return <AuthGate onSuccess={() => setAuthed(true)} />
   }
 
   return (
