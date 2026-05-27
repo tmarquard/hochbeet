@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { ChangeEvent } from 'react'
 import { BedSvg } from './BedSvg'
 import type { BedColor } from './BedSvg'
+import type { BasketItem } from './Basket'
 import './BedConfigurator.css'
 
 const ROW_HEIGHT_CM = 14
@@ -60,20 +61,32 @@ function calculatePrice(
   }
 }
 
-export function BedConfigurator() {
+interface Props {
+  onAddToBasket: (config: Omit<BasketItem, 'id'>) => void
+}
+
+export function BedConfigurator({ onAddToBasket }: Props) {
   const [length, setLength] = useState(DEFAULTS.length)
   const [depth, setDepth] = useState(DEFAULTS.depth)
   const [rows, setRows] = useState(DEFAULTS.rows)
   const [color, setColor] = useState<BedColor>(DEFAULTS.color)
-  const [added, setAdded] = useState(false)
+  const [justAdded, setJustAdded] = useState(false)
 
   const heightCm = rows * ROW_HEIGHT_CM
   const price = calculatePrice(length, depth, rows, color)
   const selectedColor = COLOR_OPTIONS.find((c) => c.id === color)!
 
   const handleAddToBasket = () => {
-    setAdded(true)
-    window.setTimeout(() => setAdded(false), 2500)
+    onAddToBasket({
+      length,
+      depth,
+      rows,
+      color,
+      colorLabel: selectedColor.label,
+      price: price.total,
+    })
+    setJustAdded(true)
+    window.setTimeout(() => setJustAdded(false), 2000)
   }
 
   return (
@@ -87,96 +100,97 @@ export function BedConfigurator() {
         </p>
       </header>
 
-      <div className="checkout-grid">
-        <div className="preview-card">
-          <BedSvg length={length} depth={depth} rows={rows} color={color} />
-          <div className="preview-caption">
-            <span>
-              <strong>{length}</strong> cm
-            </span>
-            <span aria-hidden="true">×</span>
-            <span>
-              <strong>{depth}</strong> cm
-            </span>
-            <span aria-hidden="true">×</span>
-            <span>
-              <strong>{heightCm}</strong> cm
-            </span>
+      <div className="preview-card">
+        <BedSvg length={length} depth={depth} rows={rows} color={color} />
+        <div className="preview-caption">
+          <span>
+            <strong>{length}</strong> cm
+          </span>
+          <span aria-hidden="true">×</span>
+          <span>
+            <strong>{depth}</strong> cm
+          </span>
+          <span aria-hidden="true">×</span>
+          <span>
+            <strong>{heightCm}</strong> cm
+          </span>
+          <span className="preview-divider" aria-hidden="true">
+            ·
+          </span>
+          <span>{selectedColor.label}</span>
+        </div>
+      </div>
+
+      <div className="config-row">
+        <div className="card config-card">
+          <h2>Konfiguration</h2>
+
+          <ColorSelector value={color} onChange={setColor} />
+
+          <div className="controls">
+            <ControlRow
+              label="Länge"
+              value={length}
+              unit="cm"
+              min={LIMITS.length.min}
+              max={LIMITS.length.max}
+              onChange={setLength}
+            />
+            <ControlRow
+              label="Breite"
+              value={depth}
+              unit="cm"
+              min={LIMITS.depth.min}
+              max={LIMITS.depth.max}
+              onChange={setDepth}
+            />
+            <ControlRow
+              label="Höhe"
+              value={rows}
+              unit={`${rows === 1 ? 'Reihe' : 'Reihen'} · ${heightCm} cm`}
+              min={LIMITS.rows.min}
+              max={LIMITS.rows.max}
+              onChange={setRows}
+            />
           </div>
         </div>
 
-        <aside className="sidebar">
-          <div className="card config-card">
-            <h2>Konfiguration</h2>
-
-            <ColorSelector value={color} onChange={setColor} />
-
-            <div className="controls">
-              <ControlRow
-                label="Länge"
-                value={length}
-                unit="cm"
-                min={LIMITS.length.min}
-                max={LIMITS.length.max}
-                onChange={setLength}
-              />
-              <ControlRow
-                label="Breite"
-                value={depth}
-                unit="cm"
-                min={LIMITS.depth.min}
-                max={LIMITS.depth.max}
-                onChange={setDepth}
-              />
-              <ControlRow
-                label="Höhe"
-                value={rows}
-                unit={`${rows === 1 ? 'Reihe' : 'Reihen'} · ${heightCm} cm`}
-                min={LIMITS.rows.min}
-                max={LIMITS.rows.max}
-                onChange={setRows}
-              />
-            </div>
-          </div>
-
-          <div className="card price-card">
-            <h2>Preisübersicht</h2>
-            <ul className="price-breakdown">
+        <div className="card price-card">
+          <h2>Preisübersicht</h2>
+          <ul className="price-breakdown">
+            <li>
+              <span>Grundpreis (Beschläge & Füße)</span>
+              <span>{eur.format(price.base)}</span>
+            </li>
+            <li>
+              <span>
+                Lärchenholz ({rows} {rows === 1 ? 'Reihe' : 'Reihen'} ×{' '}
+                {price.perimeterCm} cm)
+              </span>
+              <span>{eur.format(price.material)}</span>
+            </li>
+            {price.colorPremium > 0 && (
               <li>
-                <span>Grundpreis (Beschläge & Füße)</span>
-                <span>{eur.format(price.base)}</span>
+                <span>Oberfläche · {selectedColor.label}</span>
+                <span>{eur.format(price.colorPremium)}</span>
               </li>
-              <li>
-                <span>
-                  Lärchenholz ({rows} {rows === 1 ? 'Reihe' : 'Reihen'} ×{' '}
-                  {price.perimeterCm} cm)
-                </span>
-                <span>{eur.format(price.material)}</span>
-              </li>
-              {price.colorPremium > 0 && (
-                <li>
-                  <span>Oberfläche · {selectedColor.label}</span>
-                  <span>{eur.format(price.colorPremium)}</span>
-                </li>
-              )}
-              <li className="price-total">
-                <span>Gesamtpreis</span>
-                <span>{eur.format(price.total)}</span>
-              </li>
-            </ul>
-            <p className="price-note">
-              Kostenloser Versand · Lieferzeit 2–3 Wochen
-            </p>
-            <button
-              type="button"
-              className={`basket-btn${added ? ' is-added' : ''}`}
-              onClick={handleAddToBasket}
-              disabled={added}
-            >
-              {added ? '✓ Im Warenkorb' : 'In den Warenkorb'}
-            </button>
-          </div>
-        </aside>
+            )}
+            <li className="price-total">
+              <span>Gesamtpreis</span>
+              <span>{eur.format(price.total)}</span>
+            </li>
+          </ul>
+          <p className="price-note">
+            Kostenloser Versand · Lieferzeit 2–3 Wochen
+          </p>
+          <button
+            type="button"
+            className={`basket-btn${justAdded ? ' is-added' : ''}`}
+            onClick={handleAddToBasket}
+          >
+            {justAdded ? '✓ Hinzugefügt' : 'In den Warenkorb'}
+          </button>
+        </div>
       </div>
     </section>
   )

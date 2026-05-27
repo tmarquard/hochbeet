@@ -6,10 +6,14 @@ main {
 .site-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 14px 40px;
   background: var(--card-bg);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 0 rgba(60, 46, 31, 0.02);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .site-brand {
@@ -26,7 +30,7 @@ main {
 
 @media (max-width: 640px) {
   .site-header {
-    padding: 8px 16px;
+    padding: 10px 20px;
   }
 
   .site-logo {

@@ -1,14 +1,16 @@
 .configurator {
-  padding: 48px 24px 80px;
+  padding: 40px 24px 80px;
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
 .configurator-header {
   text-align: center;
-  margin-bottom: 40px;
 }
 
 .eyebrow {
@@ -30,21 +32,14 @@
   color: var(--text);
 }
 
-.checkout-grid {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 28px;
-  align-items: start;
-}
-
 .preview-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 32px 24px 24px;
   box-shadow: var(--shadow);
-  position: sticky;
-  top: 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .preview-caption {
@@ -54,6 +49,7 @@
   font-size: 14px;
   color: var(--text);
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
   gap: 10px;
@@ -64,10 +60,17 @@
   font-weight: 600;
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.preview-divider {
+  color: var(--border);
+  font-size: 18px;
+  padding: 0 2px;
+}
+
+.config-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
 }
 
 .card {
@@ -293,11 +296,11 @@
     transform 0.08s ease;
 }
 
-.basket-btn:hover:not(:disabled) {
+.basket-btn:hover {
   background: var(--accent-hover);
 }
 
-.basket-btn:active:not(:disabled) {
+.basket-btn:active {
   transform: translateY(1px);
 }
 
@@ -309,23 +312,23 @@
 .basket-btn.is-added {
   background: var(--green-light);
   color: var(--green-dark);
-  cursor: default;
 }
 
 @media (max-width: 880px) {
-  .checkout-grid {
+  .config-row {
     grid-template-columns: 1fr;
-  }
-
-  .preview-card {
-    position: static;
   }
 
   .configurator {
     padding: 32px 16px 64px;
+    gap: 20px;
   }
 
   .card {
     padding: 22px;
+  }
+
+  .preview-card {
+    padding: 24px 16px 20px;
   }
 }
