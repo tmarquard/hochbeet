@@ -1,16 +1,17 @@
 .configurator {
-  padding: 40px 24px 80px;
+  padding: 32px 24px 64px;
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
 }
 
 .configurator-header {
   text-align: center;
+  margin-bottom: 4px;
 }
 
 .eyebrow {
@@ -32,27 +33,37 @@
   color: var(--text);
 }
 
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
 .preview-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 32px 24px 24px;
+  padding: 24px 20px 20px;
   box-shadow: var(--shadow);
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .preview-caption {
   margin-top: 12px;
   text-align: center;
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
-  gap: 10px;
+  gap: 8px;
 }
 
 .preview-caption strong {
@@ -62,32 +73,26 @@
 
 .preview-divider {
   color: var(--border);
-  font-size: 18px;
+  font-size: 16px;
   padding: 0 2px;
-}
-
-.config-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  align-items: start;
 }
 
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 28px;
+  padding: 24px;
   box-shadow: var(--shadow);
 }
 
 .card h2 {
-  margin: 0 0 24px;
+  margin: 0 0 20px;
+  font-size: 18px;
 }
 
 .color-selector {
-  margin-bottom: 24px;
-  padding-bottom: 24px;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -95,22 +100,22 @@
   display: block;
   font-weight: 500;
   color: var(--text-h);
-  font-size: 15px;
-  margin-bottom: 12px;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .color-options {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
 }
 
 .color-swatch {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 14px 8px;
+  gap: 8px;
+  padding: 10px 6px;
   border: 2px solid var(--border);
   border-radius: 12px;
   background: var(--bg-soft);
@@ -138,15 +143,15 @@
 }
 
 .swatch-color {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1px solid rgba(60, 46, 31, 0.25);
   box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.12);
 }
 
 .swatch-label {
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
   line-height: 1.3;
   display: flex;
@@ -155,7 +160,7 @@
 }
 
 .swatch-premium {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text);
   font-family: var(--mono);
 }
@@ -163,13 +168,13 @@
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 18px;
 }
 
 .control-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .control-head {
@@ -182,7 +187,7 @@
 .control-label {
   font-weight: 500;
   color: var(--text-h);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .control-value {
@@ -192,14 +197,14 @@
 }
 
 .control-input {
-  width: 62px;
-  padding: 5px 8px;
+  width: 58px;
+  padding: 4px 8px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg-soft);
   color: var(--text-h);
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 13px;
   text-align: right;
 }
 
@@ -211,7 +216,7 @@
 
 .control-unit {
   color: var(--text);
-  font-size: 13px;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -225,68 +230,94 @@
   display: flex;
   justify-content: space-between;
   color: var(--text);
-  font-size: 11px;
+  font-size: 10px;
   font-family: var(--mono);
   margin-top: 2px;
 }
 
-.price-breakdown {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 16px;
+.price-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 18px 24px;
+}
+
+.price-stats {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.price-stat {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 2px;
+  justify-content: center;
 }
 
-.price-breakdown li {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
+.stat-label {
+  font-size: 11px;
   color: var(--text);
-  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  font-weight: 600;
 }
 
-.price-breakdown li > span:last-child {
-  color: var(--text-h);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.price-breakdown .price-total {
-  border-top: 1px solid var(--border);
-  padding-top: 14px;
-  margin-top: 4px;
-  font-size: 17px;
+.stat-value {
+  font-size: 18px;
   font-weight: 600;
   color: var(--text-h);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
 }
 
-.price-breakdown .price-total > span:last-child {
-  font-size: 22px;
+.stat-hint {
+  font-size: 10px;
+  color: var(--text);
+  font-family: var(--mono);
+  margin-top: 1px;
+}
+
+.price-stat.is-total {
+  padding-left: 24px;
+  border-left: 1px solid var(--border);
+}
+
+.price-stat.is-total .stat-label {
+  color: var(--text-h);
+}
+
+.price-stat.is-total .stat-value {
+  font-size: 26px;
   color: var(--wood-brown-dark);
 }
 
-.price-note {
-  font-size: 13px;
+.price-summary-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.shipping-note {
+  font-size: 12px;
   color: var(--green-dark);
-  margin: 0 0 18px;
-  background: var(--accent-bg);
-  border-radius: 8px;
-  padding: 10px 14px;
-  border: 1px solid var(--accent-border);
+  margin: 0;
+  text-align: right;
+  line-height: 1.3;
+  max-width: 130px;
 }
 
 .basket-btn {
   display: block;
-  width: 100%;
-  padding: 14px 24px;
+  padding: 12px 28px;
   border: 1px solid var(--accent-border);
   border-radius: 12px;
   background: var(--green-pastel);
   color: var(--accent-text);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   font-family: var(--sans);
   letter-spacing: 0.2px;
@@ -294,6 +325,7 @@
   transition:
     background 0.18s ease,
     transform 0.08s ease;
+  white-space: nowrap;
 }
 
 .basket-btn:hover {
@@ -315,20 +347,48 @@
 }
 
 @media (max-width: 880px) {
-  .config-row {
+  .main-grid {
     grid-template-columns: 1fr;
   }
 
   .configurator {
-    padding: 32px 16px 64px;
-    gap: 20px;
+    padding: 24px 16px 56px;
   }
 
   .card {
-    padding: 22px;
+    padding: 20px;
   }
 
-  .preview-card {
-    padding: 24px 16px 20px;
+  .price-summary {
+    padding: 18px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .price-stats {
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .price-summary-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .shipping-note {
+    text-align: center;
+    max-width: none;
+  }
+
+  .price-summary-btn {
+    width: 100%;
+  }
+
+  .price-stat.is-total {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
   }
 }
