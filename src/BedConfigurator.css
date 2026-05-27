@@ -391,18 +391,91 @@
   }
 
   .card {
-    padding: 20px;
+    padding: 18px;
+  }
+
+  .card h2 {
+    font-size: 16px;
+    margin: 0 0 12px;
+  }
+
+  .preview-card {
+    padding: 16px 14px 12px;
+  }
+
+  .preview-caption {
+    font-size: 12px;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .color-selector {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+  }
+
+  .color-selector-label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .color-options {
+    gap: 6px;
+  }
+
+  .color-swatch {
+    padding: 6px 4px;
+    gap: 4px;
+  }
+
+  .swatch-color {
+    width: 24px;
+    height: 24px;
+  }
+
+  .swatch-label {
+    font-size: 11px;
+  }
+
+  .swatch-premium {
+    display: none;
+  }
+
+  .controls {
+    gap: 10px;
+  }
+
+  .control-row {
+    gap: 2px;
+  }
+
+  .control-range {
+    display: none;
+  }
+
+  .control-label {
+    font-size: 14px;
+  }
+
+  .control-input {
+    width: 54px;
+    padding: 4px 6px;
+    font-size: 13px;
+  }
+
+  .control-unit {
+    font-size: 12px;
   }
 
   .price-summary {
-    padding: 18px;
+    padding: 16px;
     flex-direction: column;
     align-items: stretch;
   }
 
   .price-stats {
     justify-content: space-between;
-    gap: 16px;
+    gap: 14px;
   }
 
   .price-summary-btn {
