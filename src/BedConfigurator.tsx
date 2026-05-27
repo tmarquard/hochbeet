@@ -6,8 +6,9 @@ import type { BasketItem } from './Basket'
 import './BedConfigurator.css'
 
 const ROW_HEIGHT_CM = 14
-const BASE_PRICE_EUR = 39
+const BUILDING_KIT_EUR = 39
 const PRICE_PER_CM_EUR = 0.45
+const SHIPPING_EUR = 0
 
 const LIMITS = {
   length: { min: 30, max: 125 },
@@ -49,15 +50,16 @@ function calculatePrice(
   color: BedColor,
 ) {
   const perimeterCm = 2 * (length + depth)
-  const material = perimeterCm * rows * PRICE_PER_CM_EUR
+  const wood = perimeterCm * rows * PRICE_PER_CM_EUR
   const colorPremium =
     COLOR_OPTIONS.find((c) => c.id === color)?.premium ?? 0
+  const kit = BUILDING_KIT_EUR + colorPremium
+  const shipping = SHIPPING_EUR
   return {
-    base: BASE_PRICE_EUR,
-    material,
-    colorPremium,
-    perimeterCm,
-    total: BASE_PRICE_EUR + material + colorPremium,
+    wood,
+    kit,
+    shipping,
+    total: wood + kit + shipping,
   }
 }
 
@@ -75,6 +77,7 @@ export function BedConfigurator({ onAddToBasket }: Props) {
   const heightCm = rows * ROW_HEIGHT_CM
   const price = calculatePrice(length, depth, rows, color)
   const selectedColor = COLOR_OPTIONS.find((c) => c.id === color)!
+  const boardCount = 4 * rows
 
   const handleAddToBasket = () => {
     onAddToBasket({
@@ -99,6 +102,29 @@ export function BedConfigurator({ onAddToBasket }: Props) {
           Konfigurieren Sie Ihr Hochbeet in den gewünschten Abmessungen.
         </p>
       </header>
+
+      <div className="card price-summary">
+        <div className="price-stats">
+          <PriceStat label="Holz" value={eur.format(price.wood)} />
+          <PriceStat label="Bausatz" value={eur.format(price.kit)} />
+          <PriceStat
+            label="Versand"
+            value={price.shipping === 0 ? 'Gratis' : eur.format(price.shipping)}
+          />
+          <PriceStat
+            label="Gesamtpreis"
+            value={eur.format(price.total)}
+            highlight
+          />
+        </div>
+        <button
+          type="button"
+          className={`basket-btn price-summary-btn${justAdded ? ' is-added' : ''}`}
+          onClick={handleAddToBasket}
+        >
+          {justAdded ? '✓ Hinzugefügt' : 'In den Warenkorb'}
+        </button>
+      </div>
 
       <div className="main-grid">
         <div className="preview-card">
@@ -156,41 +182,21 @@ export function BedConfigurator({ onAddToBasket }: Props) {
         </div>
       </div>
 
-      <div className="card price-summary">
-        <div className="price-stats">
-          <PriceStat
-            label="Grundpreis"
-            value={eur.format(price.base)}
-          />
-          <PriceStat
-            label="Lärchenholz"
-            value={eur.format(price.material)}
-            hint={`${rows} × ${price.perimeterCm} cm`}
-          />
-          {price.colorPremium > 0 && (
-            <PriceStat
-              label={`Oberfläche · ${selectedColor.label}`}
-              value={eur.format(price.colorPremium)}
-            />
-          )}
-          <PriceStat
-            label="Gesamtpreis"
-            value={eur.format(price.total)}
-            highlight
-          />
-        </div>
-        <div className="price-summary-cta">
-          <p className="shipping-note">
-            Kostenloser Versand · 2–3 Wochen
+      <div className="card kit-card">
+        <div className="kit-header">
+          <h2>Lieferumfang</h2>
+          <p className="kit-subtitle">
+            Selbstbausatz · Lärchenholz · Lieferzeit 2–3 Wochen
           </p>
-          <button
-            type="button"
-            className={`basket-btn price-summary-btn${justAdded ? ' is-added' : ''}`}
-            onClick={handleAddToBasket}
-          >
-            {justAdded ? '✓ Hinzugefügt' : 'In den Warenkorb'}
-          </button>
         </div>
+        <ul className="kit-list">
+          <li>4 Beine</li>
+          <li>{boardCount} Seitenbretter</li>
+          <li>Holzschutzöl</li>
+          <li>Schrauben & Beschläge</li>
+          <li>Folien-Einleger</li>
+          <li>Bauanleitung</li>
+        </ul>
       </div>
     </section>
   )
@@ -199,16 +205,14 @@ export function BedConfigurator({ onAddToBasket }: Props) {
 interface PriceStatProps {
   label: string
   value: string
-  hint?: string
   highlight?: boolean
 }
 
-function PriceStat({ label, value, hint, highlight }: PriceStatProps) {
+function PriceStat({ label, value, highlight }: PriceStatProps) {
   return (
     <div className={`price-stat${highlight ? ' is-total' : ''}`}>
       <span className="stat-label">{label}</span>
       <span className="stat-value">{value}</span>
-      {hint && <span className="stat-hint">{hint}</span>}
     </div>
   )
 }

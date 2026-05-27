@@ -246,7 +246,7 @@
 
 .price-stats {
   display: flex;
-  gap: 28px;
+  gap: 32px;
   flex-wrap: wrap;
   align-items: stretch;
 }
@@ -254,7 +254,7 @@
 .price-stat {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   justify-content: center;
 }
 
@@ -274,13 +274,6 @@
   line-height: 1.15;
 }
 
-.stat-hint {
-  font-size: 10px;
-  color: var(--text);
-  font-family: var(--mono);
-  margin-top: 1px;
-}
-
 .price-stat.is-total {
   padding-left: 24px;
   border-left: 1px solid var(--border);
@@ -295,19 +288,61 @@
   color: var(--wood-brown-dark);
 }
 
-.price-summary-cta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.kit-card {
+  padding: 22px 24px;
 }
 
-.shipping-note {
-  font-size: 12px;
+.kit-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.kit-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.kit-subtitle {
+  font-size: 13px;
   color: var(--green-dark);
   margin: 0;
-  text-align: right;
-  line-height: 1.3;
-  max-width: 130px;
+  font-weight: 500;
+}
+
+.kit-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.kit-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-h);
+  padding: 2px 0;
+}
+
+.kit-list li::before {
+  content: '✓';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--green-light);
+  color: var(--green-dark);
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
 }
 
 .basket-btn {
@@ -370,17 +405,6 @@
     gap: 16px;
   }
 
-  .price-summary-cta {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .shipping-note {
-    text-align: center;
-    max-width: none;
-  }
-
   .price-summary-btn {
     width: 100%;
   }
@@ -390,5 +414,21 @@
     border-left: none;
     border-top: 1px solid var(--border);
     padding-top: 12px;
+  }
+
+  .kit-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .kit-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .kit-list {
+    grid-template-columns: 1fr;
   }
 }
