@@ -4,6 +4,8 @@ import { BedSvg } from './BedSvg'
 import './BedConfigurator.css'
 
 const ROW_HEIGHT_CM = 14
+const BASE_PRICE_EUR = 39
+const PRICE_PER_CM_EUR = 0.45
 
 const LIMITS = {
   length: { min: 30, max: 125 },
@@ -17,56 +19,132 @@ const DEFAULTS = {
   rows: 2,
 }
 
+const eur = new Intl.NumberFormat('de-DE', {
+  style: 'currency',
+  currency: 'EUR',
+})
+
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value))
+}
+
+function calculatePrice(length: number, depth: number, rows: number) {
+  const perimeterCm = 2 * (length + depth)
+  const material = perimeterCm * rows * PRICE_PER_CM_EUR
+  return {
+    base: BASE_PRICE_EUR,
+    material,
+    perimeterCm,
+    total: BASE_PRICE_EUR + material,
+  }
 }
 
 export function BedConfigurator() {
   const [length, setLength] = useState(DEFAULTS.length)
   const [depth, setDepth] = useState(DEFAULTS.depth)
   const [rows, setRows] = useState(DEFAULTS.rows)
+  const [added, setAdded] = useState(false)
 
   const heightCm = rows * ROW_HEIGHT_CM
+  const price = calculatePrice(length, depth, rows)
+
+  const handleAddToBasket = () => {
+    setAdded(true)
+    window.setTimeout(() => setAdded(false), 2500)
+  }
 
   return (
     <section className="configurator">
       <header className="configurator-header">
-        <h1>Hochbeet Configurator</h1>
-        <p>Design a custom raised bed by adjusting length, depth, and height.</p>
+        <p className="eyebrow">Hochbeet nach Maß</p>
+        <h1>Ihr individuelles Hochbeet</h1>
+        <p className="lead">
+          Massive Lärchenholz-Bretter, handgefertigt in Deutschland.
+          Konfigurieren Sie Ihr Hochbeet in den gewünschten Abmessungen.
+        </p>
       </header>
 
-      <div className="preview">
-        <BedSvg length={length} depth={depth} rows={rows} />
-      </div>
+      <div className="checkout-grid">
+        <div className="preview-card">
+          <BedSvg length={length} depth={depth} rows={rows} />
+          <div className="preview-caption">
+            <span>
+              <strong>{length}</strong> cm
+            </span>
+            <span aria-hidden="true">×</span>
+            <span>
+              <strong>{depth}</strong> cm
+            </span>
+            <span aria-hidden="true">×</span>
+            <span>
+              <strong>{heightCm}</strong> cm
+            </span>
+          </div>
+        </div>
 
-      <div className="controls">
-        <ControlRow
-          label="Length"
-          value={length}
-          unit="cm"
-          min={LIMITS.length.min}
-          max={LIMITS.length.max}
-          step={1}
-          onChange={setLength}
-        />
-        <ControlRow
-          label="Depth"
-          value={depth}
-          unit="cm"
-          min={LIMITS.depth.min}
-          max={LIMITS.depth.max}
-          step={1}
-          onChange={setDepth}
-        />
-        <ControlRow
-          label="Height"
-          value={rows}
-          unit={`${rows === 1 ? 'row' : 'rows'} · ${heightCm} cm`}
-          min={LIMITS.rows.min}
-          max={LIMITS.rows.max}
-          step={1}
-          onChange={setRows}
-        />
+        <aside className="sidebar">
+          <div className="card config-card">
+            <h2>Konfiguration</h2>
+            <div className="controls">
+              <ControlRow
+                label="Länge"
+                value={length}
+                unit="cm"
+                min={LIMITS.length.min}
+                max={LIMITS.length.max}
+                onChange={setLength}
+              />
+              <ControlRow
+                label="Breite"
+                value={depth}
+                unit="cm"
+                min={LIMITS.depth.min}
+                max={LIMITS.depth.max}
+                onChange={setDepth}
+              />
+              <ControlRow
+                label="Höhe"
+                value={rows}
+                unit={`${rows === 1 ? 'Reihe' : 'Reihen'} · ${heightCm} cm`}
+                min={LIMITS.rows.min}
+                max={LIMITS.rows.max}
+                onChange={setRows}
+              />
+            </div>
+          </div>
+
+          <div className="card price-card">
+            <h2>Preisübersicht</h2>
+            <ul className="price-breakdown">
+              <li>
+                <span>Grundpreis (Beschläge & Füße)</span>
+                <span>{eur.format(price.base)}</span>
+              </li>
+              <li>
+                <span>
+                  Lärchenholz ({rows} {rows === 1 ? 'Reihe' : 'Reihen'} ×{' '}
+                  {price.perimeterCm} cm)
+                </span>
+                <span>{eur.format(price.material)}</span>
+              </li>
+              <li className="price-total">
+                <span>Gesamtpreis</span>
+                <span>{eur.format(price.total)}</span>
+              </li>
+            </ul>
+            <p className="price-note">
+              Kostenloser Versand · Lieferzeit 2–3 Wochen
+            </p>
+            <button
+              type="button"
+              className={`basket-btn${added ? ' is-added' : ''}`}
+              onClick={handleAddToBasket}
+              disabled={added}
+            >
+              {added ? '✓ Im Warenkorb' : 'In den Warenkorb'}
+            </button>
+          </div>
+        </aside>
       </div>
     </section>
   )
@@ -78,7 +156,6 @@ interface ControlRowProps {
   unit: string
   min: number
   max: number
-  step: number
   onChange: (value: number) => void
 }
 
@@ -88,7 +165,6 @@ function ControlRow({
   unit,
   min,
   max,
-  step,
   onChange,
 }: ControlRowProps) {
   const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -96,40 +172,43 @@ function ControlRow({
     if (Number.isNaN(raw)) return
     onChange(clamp(raw, min, max))
   }
-
   const handleSliderChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(Number(e.target.value))
   }
-
   const inputId = `control-${label.toLowerCase()}`
-
   return (
     <div className="control-row">
-      <label htmlFor={inputId} className="control-label">
-        {label}
-      </label>
+      <div className="control-head">
+        <label htmlFor={inputId} className="control-label">
+          {label}
+        </label>
+        <div className="control-value">
+          <input
+            type="number"
+            min={min}
+            max={max}
+            step={1}
+            value={value}
+            onChange={handleNumberChange}
+            className="control-input"
+            aria-label={`${label} eingeben`}
+          />
+          <span className="control-unit">{unit}</span>
+        </div>
+      </div>
       <input
         id={inputId}
         type="range"
         min={min}
         max={max}
-        step={step}
+        step={1}
         value={value}
         onChange={handleSliderChange}
         className="control-slider"
       />
-      <div className="control-value">
-        <input
-          type="number"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={handleNumberChange}
-          className="control-input"
-          aria-label={`${label} value`}
-        />
-        <span className="control-unit">{unit}</span>
+      <div className="control-range">
+        <span>{min}</span>
+        <span>{max}</span>
       </div>
     </div>
   )
