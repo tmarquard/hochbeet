@@ -6,35 +6,37 @@
   margin: 0 auto;
 }
 
-.bed-face,
-.bed-top-rim {
-  fill: #faf0dc;
-  stroke: var(--wood-brown);
+.bed-face {
+  fill: var(--bed-face-fill);
+  stroke: var(--bed-stroke);
   stroke-width: 2;
   stroke-linejoin: round;
 }
 
 .bed-top-rim {
-  fill: #f1dfba;
+  fill: var(--bed-top-fill);
+  stroke: var(--bed-stroke);
+  stroke-width: 2;
+  stroke-linejoin: round;
 }
 
 .bed-foot {
-  fill: #ead4ae;
-  stroke: var(--wood-brown);
+  fill: var(--bed-foot-fill);
+  stroke: var(--bed-stroke);
   stroke-width: 2;
   stroke-linejoin: round;
 }
 
 .bed-top-inner {
   fill: var(--green-pastel);
-  stroke: var(--wood-brown);
+  stroke: var(--bed-stroke);
   stroke-width: 2;
   stroke-linejoin: round;
 }
 
 .bed-plank {
-  stroke: var(--wood-brown);
+  stroke: var(--bed-plank-stroke);
   stroke-width: 1.5;
   stroke-linecap: round;
-  opacity: 0.55;
+  opacity: var(--bed-plank-opacity);
 }

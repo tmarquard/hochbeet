@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { ChangeEvent } from 'react'
 import { BedSvg } from './BedSvg'
+import type { BedColor } from './BedSvg'
 import './BedConfigurator.css'
 
 const ROW_HEIGHT_CM = 14
@@ -17,7 +18,19 @@ const DEFAULTS = {
   length: 60,
   depth: 20,
   rows: 2,
+  color: 'natural' as BedColor,
 }
+
+const COLOR_OPTIONS: Array<{
+  id: BedColor
+  label: string
+  swatch: string
+  premium: number
+}> = [
+  { id: 'natural', label: 'Natur', swatch: '#d4a574', premium: 0 },
+  { id: 'dark', label: 'Dunkelbraun', swatch: '#5c3f22', premium: 25 },
+  { id: 'black', label: 'Schwarz', swatch: '#1a1612', premium: 35 },
+]
 
 const eur = new Intl.NumberFormat('de-DE', {
   style: 'currency',
@@ -28,14 +41,22 @@ function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value))
 }
 
-function calculatePrice(length: number, depth: number, rows: number) {
+function calculatePrice(
+  length: number,
+  depth: number,
+  rows: number,
+  color: BedColor,
+) {
   const perimeterCm = 2 * (length + depth)
   const material = perimeterCm * rows * PRICE_PER_CM_EUR
+  const colorPremium =
+    COLOR_OPTIONS.find((c) => c.id === color)?.premium ?? 0
   return {
     base: BASE_PRICE_EUR,
     material,
+    colorPremium,
     perimeterCm,
-    total: BASE_PRICE_EUR + material,
+    total: BASE_PRICE_EUR + material + colorPremium,
   }
 }
 
@@ -43,10 +64,12 @@ export function BedConfigurator() {
   const [length, setLength] = useState(DEFAULTS.length)
   const [depth, setDepth] = useState(DEFAULTS.depth)
   const [rows, setRows] = useState(DEFAULTS.rows)
+  const [color, setColor] = useState<BedColor>(DEFAULTS.color)
   const [added, setAdded] = useState(false)
 
   const heightCm = rows * ROW_HEIGHT_CM
-  const price = calculatePrice(length, depth, rows)
+  const price = calculatePrice(length, depth, rows, color)
+  const selectedColor = COLOR_OPTIONS.find((c) => c.id === color)!
 
   const handleAddToBasket = () => {
     setAdded(true)
@@ -66,7 +89,7 @@ export function BedConfigurator() {
 
       <div className="checkout-grid">
         <div className="preview-card">
-          <BedSvg length={length} depth={depth} rows={rows} />
+          <BedSvg length={length} depth={depth} rows={rows} color={color} />
           <div className="preview-caption">
             <span>
               <strong>{length}</strong> cm
@@ -85,6 +108,9 @@ export function BedConfigurator() {
         <aside className="sidebar">
           <div className="card config-card">
             <h2>Konfiguration</h2>
+
+            <ColorSelector value={color} onChange={setColor} />
+
             <div className="controls">
               <ControlRow
                 label="Länge"
@@ -127,6 +153,12 @@ export function BedConfigurator() {
                 </span>
                 <span>{eur.format(price.material)}</span>
               </li>
+              {price.colorPremium > 0 && (
+                <li>
+                  <span>Oberfläche · {selectedColor.label}</span>
+                  <span>{eur.format(price.colorPremium)}</span>
+                </li>
+              )}
               <li className="price-total">
                 <span>Gesamtpreis</span>
                 <span>{eur.format(price.total)}</span>
@@ -147,6 +179,48 @@ export function BedConfigurator() {
         </aside>
       </div>
     </section>
+  )
+}
+
+interface ColorSelectorProps {
+  value: BedColor
+  onChange: (color: BedColor) => void
+}
+
+function ColorSelector({ value, onChange }: ColorSelectorProps) {
+  return (
+    <div className="color-selector" role="radiogroup" aria-label="Holzfarbe">
+      <span className="color-selector-label">Farbe</span>
+      <div className="color-options">
+        {COLOR_OPTIONS.map((option) => {
+          const isSelected = value === option.id
+          return (
+            <button
+              key={option.id}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              className={`color-swatch${isSelected ? ' is-selected' : ''}`}
+              onClick={() => onChange(option.id)}
+            >
+              <span
+                className="swatch-color"
+                style={{ background: option.swatch }}
+                aria-hidden="true"
+              />
+              <span className="swatch-label">
+                {option.label}
+                {option.premium > 0 && (
+                  <span className="swatch-premium">
+                    +{eur.format(option.premium)}
+                  </span>
+                )}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 

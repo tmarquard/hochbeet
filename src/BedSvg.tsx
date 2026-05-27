@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import './BedSvg.css'
 
 const SCALE = 3
@@ -13,13 +14,43 @@ const MAX_LENGTH = 125
 const MAX_DEPTH = 50
 const MAX_ROWS = 5
 
+export type BedColor = 'natural' | 'dark' | 'black'
+
+const PALETTES: Record<BedColor, CSSProperties> = {
+  natural: {
+    ['--bed-face-fill' as never]: '#faf0dc',
+    ['--bed-top-fill' as never]: '#f1dfba',
+    ['--bed-foot-fill' as never]: '#ead4ae',
+    ['--bed-stroke' as never]: '#8c6239',
+    ['--bed-plank-stroke' as never]: '#8c6239',
+    ['--bed-plank-opacity' as never]: '0.55',
+  },
+  dark: {
+    ['--bed-face-fill' as never]: '#7d543a',
+    ['--bed-top-fill' as never]: '#684528',
+    ['--bed-foot-fill' as never]: '#553720',
+    ['--bed-stroke' as never]: '#2d1d0e',
+    ['--bed-plank-stroke' as never]: '#2d1d0e',
+    ['--bed-plank-opacity' as never]: '0.7',
+  },
+  black: {
+    ['--bed-face-fill' as never]: '#332d28',
+    ['--bed-top-fill' as never]: '#262220',
+    ['--bed-foot-fill' as never]: '#1a1614',
+    ['--bed-stroke' as never]: '#080606',
+    ['--bed-plank-stroke' as never]: '#7a6852',
+    ['--bed-plank-opacity' as never]: '0.6',
+  },
+}
+
 interface Props {
   length: number
   depth: number
   rows: number
+  color: BedColor
 }
 
-export function BedSvg({ length, depth, rows }: Props) {
+export function BedSvg({ length, depth, rows, color }: Props) {
   const heightCm = rows * ROW_HEIGHT_CM
 
   const maxLenPx = MAX_LENGTH * SCALE
@@ -106,24 +137,16 @@ export function BedSvg({ length, depth, rows }: Props) {
     <svg
       viewBox={`0 0 ${W} ${H}`}
       className="bed-svg"
+      style={PALETTES[color]}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label={`Raised bed preview: ${length}cm by ${depth}cm, ${rows} row${rows === 1 ? '' : 's'} (${heightCm}cm tall)`}
+      aria-label={`Hochbeet-Vorschau: ${length}cm × ${depth}cm, ${rows} ${rows === 1 ? 'Reihe' : 'Reihen'} (${heightCm}cm hoch)`}
     >
-      <polygon
-        className="bed-foot"
-        points={brFoot}
-      />
+      <polygon className="bed-foot" points={brFoot} />
 
-      <polygon
-        className="bed-face"
-        points={polyPoints([FBL, FBR, FTR, FTL])}
-      />
+      <polygon className="bed-face" points={polyPoints([FBL, FBR, FTR, FTL])} />
 
-      <polygon
-        className="bed-face"
-        points={polyPoints([FBR, BBR, BTR, FTR])}
-      />
+      <polygon className="bed-face" points={polyPoints([FBR, BBR, BTR, FTR])} />
 
       <polygon
         className="bed-top-rim"
