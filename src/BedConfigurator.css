@@ -1,0 +1,110 @@
+.configurator {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 40px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.configurator-header {
+  text-align: center;
+}
+
+.configurator-header h1 {
+  margin: 0 0 8px;
+  font-size: 40px;
+  letter-spacing: -1px;
+}
+
+.configurator-header p {
+  color: var(--text);
+  margin: 0;
+}
+
+.preview {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 280px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.control-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 160px;
+  align-items: center;
+  gap: 16px;
+}
+
+.control-label {
+  font-weight: 500;
+  color: var(--text-h);
+  font-size: 16px;
+}
+
+.control-slider {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.control-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-input {
+  width: 70px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-family: var(--mono);
+  font-size: 15px;
+  text-align: right;
+}
+
+.control-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.control-input::-webkit-inner-spin-button,
+.control-input::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+.control-unit {
+  color: var(--text);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .control-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .control-value {
+    justify-content: flex-end;
+  }
+
+  .configurator-header h1 {
+    font-size: 28px;
+  }
+}

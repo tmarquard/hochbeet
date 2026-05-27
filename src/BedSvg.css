@@ -1,0 +1,37 @@
+.bed-svg {
+  width: 100%;
+  max-width: 540px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.bed-face,
+.bed-top-rim,
+.bed-foot {
+  fill: none;
+  stroke: var(--bed-stroke, #3a2a1a);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.bed-top-inner {
+  fill: var(--bed-inner-fill, rgba(0, 0, 0, 0.12));
+  stroke: var(--bed-stroke, #3a2a1a);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.bed-plank {
+  stroke: var(--bed-stroke, #3a2a1a);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+
+@media (prefers-color-scheme: dark) {
+  .bed-svg {
+    --bed-stroke: #e8d8b8;
+    --bed-inner-fill: rgba(255, 255, 255, 0.08);
+  }
+}
